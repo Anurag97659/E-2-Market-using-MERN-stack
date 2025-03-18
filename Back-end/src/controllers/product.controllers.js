@@ -4,6 +4,7 @@ import{ApiResponse}from '../utils/ApiResponse.js';
 import dotenv from "dotenv";
 import{uploadOnCloudinary}from '../utils/cloudinary.js';
 import{Product}from '../models/product.model.js';
+import{User}from '../models/user.model.js';
 dotenv.config({
     path: "/.env"
 });
@@ -214,9 +215,8 @@ const sell=asyncHandler(async(req,res)=>{
 const search=asyncHandler(async(req,res)=>{
     const{search,category,minPrice,maxPrice,sortBy,sortOrder }=req.query;
     if(!search){
-        throw new ApiError(400,"Search query is required");
-    }
-
+        throw new ApiError(400,"Search query is required");}
+        
     let filter={
         $or:[
            {Title:{$regex:search,$options:"i"}},
@@ -225,28 +225,13 @@ const search=asyncHandler(async(req,res)=>{
         ],
     };
 
-    if(category){
-        filter.Category=category;
-    }
-
-    if(minPrice){
-        filter.Price ={ ...filter.Price,$gte:minPrice };
-    }
-
-    if(maxPrice){
-        filter.Price ={ ...filter.Price,$lte:maxPrice };
-    }
-
+    if(category){filter.Category=category;}
+    if(minPrice){filter.Price ={ ...filter.Price,$gte:minPrice };}
+    if(maxPrice){filter.Price ={ ...filter.Price,$lte:maxPrice };}
     let sort ={};
-    if(sortBy){
-        sort[sortBy]=sortOrder==='desc' ? -1 : 1;
-    }
-
+    if(sortBy){sort[sortBy]=sortOrder==='desc'? -1:1;}
     const products=await Product.find(filter).sort(sort);
-
-    if(!products){
-        throw new ApiError(404,"No products found");
-    }
+    if(!products){throw new ApiError(404,"No products found");}
 
     return res.status(200).json(
         new ApiResponse(200, products,"Products found successfully")
@@ -255,7 +240,7 @@ const search=asyncHandler(async(req,res)=>{
 
 const addToCart=asyncHandler(async(req,res)=>{
     const{productId}=req.body;
-    const userId=req.user.id; 
+    const userId=req.user._id; 
 
     if(!productId){
         throw new ApiError(400,"Product ID is required");
@@ -270,20 +255,35 @@ const addToCart=asyncHandler(async(req,res)=>{
     }
     product.Client=userId;
     await product.save();
-
+    const user = await User.findByIdAndUpdate(
+        userId,
+        {$addToSet:{cart:productId}},
+        {new:true}
+    );
     res.status(200).json(
-        new ApiResponse(200, product,"Product added to cart successfully")
+        new ApiResponse(200, user,"Product added to cart successfully")
     );
 });
-
 
 const removeFromCart=asyncHandler(async(req,res)=>{
     const{productId}= req.body;
     const userId=req.user._id;
     if(!productId)throw new ApiError(400,"Product ID is required");
-    const user=await Product.findByIdAndUpdate({_id:productId},{$set:{Client:null}},{new:true});
-    if(!user)throw new ApiError(500,"Error removing product from cart");
-    res.status(200).json(new ApiResponse(200, user,"Product removed from cart successfully"));
+    const product = await Product.findByIdAndUpdate(
+        productId,
+        {$unset: { Client: ""}},
+        {new: true}
+    );
+    if(!product){
+        throw new ApiError(404, "Product not found");
+    }
+    const user = await User.findByIdAndUpdate(
+        userId,
+        { $pull:{ cart: productId}}, 
+        { new: true }
+    );
+
+    res.status(200).json(new ApiResponse(200, user, "Product removed from cart successfully"));
 });
 
 const getCartList=asyncHandler(async(req,res)=>{

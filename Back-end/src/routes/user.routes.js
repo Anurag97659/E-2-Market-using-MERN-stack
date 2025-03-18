@@ -7,7 +7,7 @@ import {  registeruser,
             refreshAccessToken,
             deleteUser,
             getUsername,
-            getProfile
+            getProfile,getusercartlist,getOrderlist
 } from '../controllers/user.controllers.js';
 import {verifyJWT} from '../middlewares/auth.middleware.js';
 import {upload} from '../middlewares/multer.middleware.js';
@@ -22,6 +22,8 @@ router.route('/updateDetails').post(verifyJWT,updateDetails);
 router.route('/delete').post(verifyJWT,deleteUser);
 router.route('/getUsername').get(verifyJWT,getUsername);
 router.route('/getProfile').get(verifyJWT,getProfile);
-router.route("/refreshToken").post(refreshAccessToken)
+router.route("/refreshToken").get(refreshAccessToken)
+router.route("/getusercartlist").get(verifyJWT,getusercartlist);
+router.route("/getorderlist").get(verifyJWT,getOrderlist);
 
 export default router;

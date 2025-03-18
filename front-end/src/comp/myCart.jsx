@@ -26,12 +26,13 @@ function MyCart(){
     }, []);
 
     useEffect(()=>{
-        fetch("http://localhost:8000/e-2market/v1/products/getCartList",{
+        fetch("http://localhost:8000/e-2market/v1/users/getusercartlist",{
             method:"GET",
             credentials:"include",
         })
             .then((res)=>res.json())
             .then((data)=>{
+                console.log("data = ",data);
                 setCartItems(data?.data||[]);
             })
             .catch((error)=>{
@@ -98,6 +99,16 @@ function MyCart(){
                     <h2 className="text-3xl font-bold text-gray-800">
                         Welcome,{username}
                     </h2>
+                </div>
+
+                <div className="w-full max-w-5xl my-4 mx-auto bg-white rounded-lg shadow-lg p-6 text-center flex justify-between flex-direction-row">
+                    <h4 className="font-semibold text-left text-gray-800">
+                        Total Items : {cartItems.length}
+                    </h4>
+                    <h4 className="font-semibold text-left text-gray-800">
+                        Amount : ₹ { cartItems.reduce((acc, item)=>acc + item.Price, 0) }\-
+                    </h4>
+                    <Link to="/bill" className="bg-red-500 text-white px-4 py-1 rounded">Buy</Link>
                 </div>
 
                 <div className="mt-8">

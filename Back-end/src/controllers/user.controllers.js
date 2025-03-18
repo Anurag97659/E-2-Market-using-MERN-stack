@@ -9,7 +9,7 @@ dotenv.config({
 });
 
 const registeruser=asyncHandler(async(req,res)=>{
-    const {username,email,password,fullname,phone,address}=req.body;
+    const{username,email,password,fullname,phone,address}=req.body;
     if(!fullname){
         throw new ApiError(400,"Fullname is required");
    }
@@ -82,6 +82,8 @@ const loginuser=asyncHandler(async(req,res)=>{
 
     const{accessToken,refreshToken}=await generateAccessTokenAndRefreshToken(user._id);
     const loggedUser=await User.findById(user._id).select("-password -refreshToken");
+    // console.log('accessToken = ',accessToken);
+    // console.log('refreshToken = ',refreshToken);
     const options={
         httpOnly:true,
         secure:true
@@ -230,6 +232,31 @@ const getProfile=asyncHandler(async(req,res)=>{
             new ApiResponse(200,user,"Profile fetched successfully")
         );
 });
+const getusercartlist = asyncHandler(async (req, res)=>{
+    const user = await User.findById(req.user?._id)
+        .populate({
+            path: "cart",
+            select: "Title Price Image",
+        })
+        .select("cart");
+        console.log("user = ",user);
+
+    if(!user){
+        throw new ApiError(404, "User not found");
+    }
+    return res.status(200).json(new ApiResponse(200, user.cart,"Cart fetched successfully"));
+});
+
+const getOrderlist=asyncHandler(async(req,res)=>{
+    const user=await User.findById(req.user?._id).select("orders");
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200,user,"Orders fetched successfully")
+        );
+
+});
+ 
 export {
     registeruser,
     loginuser,
@@ -239,6 +266,8 @@ export {
     refreshAccessToken,
     deleteUser,
     getUsername,
-    getProfile
+    getProfile,
+    getusercartlist,
+    getOrderlist
     
 };

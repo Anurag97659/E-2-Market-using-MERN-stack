@@ -12,6 +12,7 @@ import MyCart from './comp/myCart';
 import ChangeDetails from './comp/change-details';
 import ChangePassword from './comp/change-password';
 import Profile from './comp/profile';
+import Bill from './comp/bill';
 
 function App(){
   return (
@@ -29,6 +30,7 @@ function App(){
         <Route path="/search" element={<Search/>} />
         <Route path="/mycart" element={<MyCart/>} />
         <Route path="/profile" element={<Profile/>} />
+        <Route path="/bill" element={<Bill/>} />
       </Routes>
     </Router>
   );

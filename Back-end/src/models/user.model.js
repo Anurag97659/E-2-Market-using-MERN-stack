@@ -47,6 +47,11 @@ const userSchema=new Schema({
         required:true,
         minlength:3
     },
+    cart: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+    orders:{
+        type:Array,
+        default:[]
+    },
     refreshToken:{
         type:String
     }

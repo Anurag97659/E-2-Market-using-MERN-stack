@@ -112,12 +112,13 @@ function Dash(){
                         <Link to="/profile"className="block text-gray-700 font-medium py-3 px-4 rounded-md hover:bg-blue-100 hover:text-blue-800 transition-all">Profile</Link>
                         <Link to="/search"className="block text-gray-700 font-medium py-3 px-4 rounded-md hover:bg-blue-100 hover:text-blue-800 transition-all">Search ⫍‍⌕‍⫎ </Link>
                         <Link to="/mycart"className="block text-gray-700 font-medium py-3 px-4 rounded-md hover:bg-blue-100 hover:text-blue-800 transition-all">My cart 🛒 </Link>
+                        <Link to="/orders" className="block text-gray-700 font-medium py-3 px-4 rounded-md hover:bg-blue-100 hover:text-blue-800 transition-all">Orders</Link>
                         <Link to="/Change-details" className="block text-gray-700 font-medium py-3 px-4 rounded-md hover:bg-blue-100 hover:text-blue-800 transition-all">Change Details</Link>
                         <Link to="/Change-password" className="block text-gray-700 font-medium py-3 px-4 rounded-md hover:bg-blue-100 hover:text-blue-800 transition-all">Change Password</Link>
                     </div>
                 </div>
-                <button onClick={logout} className="mt-60 bg-red-500 text-white py-2 rounded-lg shadow-md hover:bg-red-600 transition">Logout</button>
-                <button onClick={deleteuser} className="mt-1 bg-red-500 text-white py-2 rounded-lg shadow-md hover:bg-red-600 transition">Delete account</button>
+                <button onClick={logout} className="mt-40 bg-red-500 text-white py-2 rounded-lg shadow-md hover:bg-red-600 transition">Logout</button>
+                <button onClick={deleteuser} className="md-3 bg-red-500 text-white py-2 rounded-lg shadow-md hover:bg-red-600 transition">Delete account</button>
             </div>
             <div className="flex-1 p-8 ml-64">
                 <div className="w-full max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6 text-center">

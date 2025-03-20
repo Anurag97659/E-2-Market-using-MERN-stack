@@ -48,10 +48,7 @@ const userSchema=new Schema({
         minlength:3
     },
     cart: [{ type: Schema.Types.ObjectId, ref: "Product" }],
-    orders:{
-        type:Array,
-        default:[]
-    },
+    orders:[{ type: Schema.Types.ObjectId, ref: "Product" }],
     refreshToken:{
         type:String
     }

@@ -246,12 +246,13 @@ const addToCart=asyncHandler(async(req,res)=>{
         throw new ApiError(400,"Product ID is required");
     }
     const product=await Product.findById(productId);
-
+      
     if(!product){
         throw new ApiError(404,"Product not found");
     }
-    if(product.Owner.toString()===userId){
-        throw new ApiError(400,"You cannot add your own product to the cart");
+    // console.log("product data = ",product)
+    if (String(product.Owner) === String(userId)) {
+        throw new ApiError(400, "You cannot add your own product to the cart");
     }
     product.Client=userId;
     await product.save();
@@ -260,6 +261,7 @@ const addToCart=asyncHandler(async(req,res)=>{
         {$addToSet:{cart:productId}},
         {new:true}
     );
+    // console.log("after = ",product)
     res.status(200).json(
         new ApiResponse(200, user,"Product added to cart successfully")
     );

@@ -247,8 +247,35 @@ const getusercartlist = asyncHandler(async (req, res)=>{
     return res.status(200).json(new ApiResponse(200, user.cart,"Cart fetched successfully"));
 });
 
+const addToOrders = asyncHandler(async (req, res) =>{
+    const userId = req.user._id;
+    const user = await User.findById(userId).populate("cart"); 
+
+    if(!user){throw new ApiError(404, "User not found");}
+
+    if(user.cart.length === 0){throw new ApiError(400, "Your cart is empty. Add products before ordering.");}
+    user.orders.push(...user.cart);
+    user.cart = [];
+    await user.save();
+
+    res.status(200)
+    .json(
+        new ApiResponse
+        (200, 
+        user.orders,
+            "Order placed successfully!"
+        )
+    );
+});
+
 const getOrderlist=asyncHandler(async(req,res)=>{
-    const user=await User.findById(req.user?._id).select("orders");
+    const user=await User.findById(req.user?._id).populate({
+        path: "orders",
+        select: "Title Price Image",
+    }).select("orders");
+    if(!user){
+        throw new ApiError(404, "User not found");
+    }
     return res
         .status(200)
         .json(
@@ -268,6 +295,7 @@ export {
     getUsername,
     getProfile,
     getusercartlist,
-    getOrderlist
+    getOrderlist,
+    addToOrders
     
 };

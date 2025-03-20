@@ -92,7 +92,7 @@ function Search() {
       })
       .catch((error)=>{
         console.error("Error adding product to cart:",error);
-        alert("Something went wrong");
+        alert("You are the owner of this product");
       });
   };
 
@@ -117,7 +117,8 @@ function Search() {
               🛒 My Cart
             </Link>
              <Link to="/profile"className="block text-gray-700 font-medium py-3 px-4 rounded-md hover:bg-blue-100 hover:text-blue-800 transition-all">Profile</Link>
-                                    
+              
+            <Link to="/orders" className="block text-gray-700 font-medium py-3 px-4 rounded-md hover:bg-blue-100 hover:text-blue-800 transition-all">Orders</Link>                      
             <Link
               to="/Change-details"
               className="block text-gray-700 font-medium py-3 px-4 rounded-md hover:bg-blue-100 hover:text-blue-800 transition-all"
@@ -168,7 +169,7 @@ function Search() {
               </button>
             </div>
 
-            {/* Row 2: Category,Min/Max Price,Sort By,Sort Order */}
+          
             <div className="flex flex-wrap gap-3">
             
               <input

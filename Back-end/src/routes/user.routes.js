@@ -7,7 +7,7 @@ import {  registeruser,
             refreshAccessToken,
             deleteUser,
             getUsername,
-            getProfile,getusercartlist,getOrderlist
+            getProfile,getusercartlist,getOrderlist,addToOrders
 } from '../controllers/user.controllers.js';
 import {verifyJWT} from '../middlewares/auth.middleware.js';
 import {upload} from '../middlewares/multer.middleware.js';
@@ -25,5 +25,6 @@ router.route('/getProfile').get(verifyJWT,getProfile);
 router.route("/refreshToken").get(refreshAccessToken)
 router.route("/getusercartlist").get(verifyJWT,getusercartlist);
 router.route("/getorderlist").get(verifyJWT,getOrderlist);
+router.route("/addtoOrder").post(verifyJWT,addToOrders);
 
 export default router;
